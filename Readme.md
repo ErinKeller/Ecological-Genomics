@@ -19,3 +19,8 @@ To Create a Code Block
 ```
 Three back ticks in rows above and below text
 ```
+Example of embedding a URL:   
+Syntax:   
+```
+[hyperlinked words] (https://www.uvm.edu/~jschall/malaria.html)
+```
