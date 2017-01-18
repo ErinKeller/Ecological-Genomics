@@ -33,5 +33,8 @@ Example of embedding an image:
 Syntax:   
 ```
 ![](URL for the picture)
+Go to "Issues" and drag and drop the image into the comment area and "Commit".   
+Copy the image by right clicking and selecting "Copy Image Link".   
+Now you can upload the image by using the syntax above.
 ```
 ![](https://cloud.githubusercontent.com/assets/19573053/22071553/7e422f3c-dd6d-11e6-8566-8152c29aa227.jpg)   
