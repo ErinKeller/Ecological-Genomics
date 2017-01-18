@@ -17,10 +17,13 @@ Syntax for creating a list
 
 To Create a Code Block   
 ```
-Three back ticks in rows above and below text
+Three back ticks in rows above and below text   
+Saves as a text, doesn't impliment code   
 ```
 Example of embedding a URL:   
 Syntax:   
 ```
 [hyperlinked words] (https://www.uvm.edu/~jschall/malaria.html)
 ```
+Implementation:   
+[hyperlinked words] (https://www.uvm.edu/~jschall/malaria.html)   
