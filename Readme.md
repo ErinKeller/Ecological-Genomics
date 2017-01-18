@@ -38,3 +38,11 @@ Copy the image by right clicking and selecting "Copy Image Link".
 Now you can upload the image by using the syntax above.
 ```
 ![](https://cloud.githubusercontent.com/assets/19573053/22071553/7e422f3c-dd6d-11e6-8566-8152c29aa227.jpg)   
+
+Formatting:   
+Syntax:   
+```
+# large header
+## medium header
+### small header
+```
