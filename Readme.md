@@ -34,3 +34,4 @@ Syntax:
 ```
 ![](URL for the picture)
 ```
+![](https://cloud.githubusercontent.com/assets/19573053/22071553/7e422f3c-dd6d-11e6-8566-8152c29aa227.jpg)   
