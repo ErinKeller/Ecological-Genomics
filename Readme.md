@@ -28,3 +28,9 @@ Syntax:
 Implementation:   
 [hyperlinked words] (https://www.uvm.edu/~jschall/malaria.html)   
 This is my lab's [webpage] (https://www.uvm.edu/~jschall/malaria.html).
+
+Example of embedding an image:   
+Syntax:   
+```
+![](URL for the picture)
+```
