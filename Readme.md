@@ -10,7 +10,12 @@ Creat a list:
 Syntax for creating a list   
 
 ```
-* item 1 (followed by three spaces)    
+* Should be * space item 3 spaces    
 * item 2   
 * item 3
+```
+
+To Create a Code Block   
+```
+Three back ticks in rows above and below text
 ```
