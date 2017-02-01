@@ -219,8 +219,76 @@
 
 * **RAD** - Restriction-assisted DNA sequencing
 
-  * Using restriction enzymes, cut genome
-  * Ligate barcode and adaptor onto sticky ends
-  * PCR
-  * Sequence
-    * Single-end reads (can do paired-end)
+  * Methods:
+    * Using restriction enzymes, cut genome
+    * Ligate barcode and adaptor onto sticky ends
+    * PCR
+    * Sequence
+      * Single-end reads (can do paired-end)
+  * Considerations
+    * There will be variation among individuals
+      * Some may not have recognizable restriction sites (sites that are methylated will not be cut)
+    * Can make a matrix: Individuals x Fragment/loci
+    * "Reduced representation" reducing the genome to a workable size.
+
+## Command Line Tutorial
+
+* Need to login when you first connect to your server 
+  * ekeller2@pbio381.uvm.edu
+  * UVM password
+* UNIX operating system
+  * 24 cpu cores (24 different processes can be running at the same time)
+  * 32Gb memory (RAM)
+  * Maintained by UVM tech group
+  * 1TB hard drive
+* To see what else is going on with the system:
+  * write: **top**
+  * root is the "god" of the machine
+  * To get out of  top: **q** 
+* Home directory:
+  * Specific for YOU
+  * Symbolized by **~/**
+  * typing: **cd** space **~/** will bring you back to your home directory
+* To find out where you are
+  * Type: **pwd** (path working directory)
+* To look at what is in a directory:
+  * Type: **ll**
+* To make a new folder:
+  * type: **mkdir** space **folder name** (make directory)
+  * If you pull what is in a directory (ll) it should be in there
+* To move within directories:
+  * type: **cd** space **directory name**
+* To find existing files:
+  * type: **cd** space **/data/**
+  * Shared space --> basal directory signified by **/data/**
+* To make a copy from the shared file:
+  * type: **cp** space **file name** space **~/mydata** 
+* To print the first 10 lines of a file:
+  * Type: **head** space **file name**
+* To print more lines:
+  * Type: **head** space **-n number** space **file name**
+* To print the last 10 lines of a file:
+  * Type: **tail** space **file name**
+* To save/redirect:
+  * type to redirect: **>** space **new file name**
+  * type to append: **>>** space **new file name** 
+* To search within a file:
+  * Type: **grep** space **'search term'** space **name of file to search in** (generalized regular expressions)
+* To move items:
+  * Type: **mv**
+  * Type: ***term** (wildcard will move all files with the term entered)
+* Built in help manual:
+  * Type: **man** space **command of interest**
+* How to delete a file:
+  * Type: **rm** space **file name**
+  * **rm will remove the file from the system forever! Be VERY careful**
+* To create a 'safe guard' (will ask you to confirm before it deletes anything)
+  * type: **ll** space **-a** (this will bring up all diles, including hidden files)
+  * Edit file and type i
+  * add: **alias rm='rm -i'**
+  * (settings will take effect once you re-login)
+* To edit files:
+  * Type: **vim** space **filename**
+  * Type **i**
+  * Type: **:w** saves
+  * Type: **:q** quits
