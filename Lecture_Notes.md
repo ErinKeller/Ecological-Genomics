@@ -292,3 +292,98 @@
   * Type **i**
   * Type: **:w** saves
   * Type: **:q** quits
+
+# February 6, 2017
+
+## Info Update
+
+RNA-Seq Workflow 
+
+* Approach
+* Experimental design
+* Library preparation 
+* Sequencing (facility) 
+* Receive data
+* Computer/server set-up
+
+1) Clean reads (**.fastq [.fq] or .gz**)
+
+* adaptors
+* nucleotide quality
+* length 
+
+2) Evaluate quality 
+
+3) de novo transcriptome assembly (*or use reference sequence*) (**.fasta**)
+
+* evaluate assembly 
+* Compare to closely related species 
+* Compare to reference set of gene (core eukaryotic [CEG])
+* N50, Number of contigs
+
+4) Map reads (*to reference*) to transcriptome (**sequence alignment file [.sam]**)
+
+* Alignment of files (each sequence will have its own file)
+
+* Annotation using Blast search
+
+  * **BlastX** 
+
+    * -> nr (gene annotation)
+
+    * uniprot database
+
+      * Gene ontology (**GO**) --> functional contigs 
+
+      * ex. out of 60k genes, ~10% are cuticular hydrocarbons but out of 2k differently expressed genes (DGEs) ~20% are cuticular hydrocarbons
+
+      * |      | Total | Cuticular |      |
+        | ---- | ----- | --------- | ---- |
+        | All  | 60k   | 600       | 10%  |
+        | DGE  | 2k    | 400       | 20%  |
+
+      * So above, the DGE are the candidate genes as they are significantly more expressed than expected (2X)
+
+5)  
+
+​	**a)** Extract read count information 
+
+* number of reads that map to each contig for each sample
+
+  ​**b)** Identify SNPs
+
+6) 
+
+​	**a)** DGE analyses
+
+- co-exp. network analyses
+
+​        **b)** Population genomics
+
+* Signatures of selection
+* genetic differentiation 
+* population structure
+* demographic history 
+
+## Paper discussion
+
+###  Dunning LT, Dennis AB, Sinclair BJ, Newcomb RD, Buckley TR. 2013. Divergent transcriptional responses to low temperature among populations of alpine and lowland species of New Zealand stick insects (Micrarchus). *Mol Ecol*. 23(11):2712-2726. doi:10.1111/mec.12767.
+
+Summary:
+
+* Evaluating local adaptation of cold-shock in different populations of *Micrachus* (stick insects) that are living in different habitat types
+* de novo assembly of 50bp single-end reads
+  * Shorter reads are more difficult to assemble because there is less overlap but you get more reads 
+* Differential expression analysis of data
+  * Considered differential expression if significant using one of the analyses (3 methods used - all testing same hypothesis just in slightly different ways [deal with variance differently])
+  * Enrichment analysis of differentially expressed genes - determine pathways/function of genes to find cold-response genes using **GO** (Blast proteins --> NR data base for annotations)
+* Local populations have adapted different pathways to deal with cold
+  * Ex. Sewell peak has a lot of up and down regulation that is not shared by other populations/species
+* All alpine populations share similar cuticle gene adaptation 
+* Disconcordant phylogenies between nuclear and mitchondrial DNA
+  * nuclear (28S slow evolving gene - represents deep relationships)sorts species out into distinct populations
+  * Mitochondrial (faster evolving, current distribution) represents introgression between species (hybridization between species)
+
+
+## Lab
+
