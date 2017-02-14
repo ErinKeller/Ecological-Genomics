@@ -297,7 +297,7 @@
 
 ## Info Update
 
-RNA-Seq Workflow 
+### RNA-Seq Workflow 
 
 * Approach
 * Experimental design
@@ -386,4 +386,384 @@ Summary:
 
 
 ## Lab
+
+Navigate to /data/project_data/fastq
+
+* cd /data/project_data/fastq
+
+To view file:
+
+* ls (list all files)
+* ll (list files in long format - extra information)
+
+**My files I am responsible for:** 07 _ 5 - 08 _ S _ 1 _ R1 and R2
+
+* 07 is individual
+* 5 - 08 is date of data collection (May 8th)
+* S indicates sample was sick
+* 1 indicates pathogenic state (0 = totally healthy, 5 = dead)
+* R1 (right read) R2 (left read)
+
+Zipped files need to be opened differently
+
+* zcat FILENAME | head (won't save the file, will just show you file)
+
+How to read zipped files:
+
+* first line has information on sequencing and ID
+* Second/third line is the sequence
+* After + (4th line) there is a Phred score of the quality of the nucleotide
+  * [Phred Scores](www.drive5.com/usearch/manual/quality_score.html)
+  * 0 - 42
+  * 0 = 100% likely that it is wrong
+  * 42 = (K) means it has an error of 0.00006
+  * Generally, if you see letters that is good reads. Symbols are not good reads
+  * Q scores > 30 are best 
+
+To more systematically look at all reads in a file use:
+
+* fastq FILENAME.fq.gz
+* Program in /data/popgen/ directory
+
+Copied trim_example.sh in /data/scripts 
+
+* cp trim_example.sh ~/scripts (now it should be in my scripts)
+* Check with "ll" that the file got copied into your own directory 
+
+To edit script:
+
+* vim trim_example.sh
+* i will allow you to edit
+
+
+
+[ekeller2@pbio381 scripts]$ vim trim_example.sh
+
+
+
+# February 8, 2017
+
+## Info Update
+
+### Transcriptomics 
+
+* Introductions/Brief overview of transcriptomics
+
+  * Why wild systems?
+    * Non-model (no reference genome)/non-traditional model organisms (beginning to accumulate genome data)
+    * Silent genes responding to multiple stimuli 
+    * Novel transcripts without homologs and closely-related model organisms
+  * Main methods:
+    * Microarrays 
+      * bit older
+      * Advantage: relatively easy to use and analyses are relatively simple
+    * RNA-Seq
+      * Newer
+      * Allows for genome-wide ecological transcripts 
+      * Methods and analyses are more time-consuming and involved
+
+* Main questions
+
+  * Three main questions
+
+    * (1) How much variation is there in expression & how is it structured? (288 studies)
+      * Evolutionary processes
+      * Gene expression heritability (natural selection)
+      * Epigenetics  
+      * QST vs FST comparisons
+      * **eQTL** - **e**xpression **q**uantitative **t**rait **l**oci mapping (expression between and within populations)
+      * macroevolution (Drift, selection, bottlenecks)
+
+
+    * (2) How do environmental stimuli affect gene expression? (136 studies)
+      * Abiotic stress
+      * Environmental heterogeneity 
+      * Host-parasite interactions
+      * Selective biotic & abiotic interactions
+      * Molecular, genotype, phenotypic plasticity
+      * Disadvantages: flash freeze to reduce unwanted stimuli and transcriptome only represents a snapshot in time
+        * time-course analyses which looks at entirety of transcriptional response can solve the snapshot problems
+    * (3) How does gene expression affect phenotype? (15 studies)
+      * Alternate phenotypes
+      * Push to move from correlation to causation 
+        * Transgenics, RNAi, Crisper/CAS
+    * 37 studies look at questions 1 and 3
+    * 57 studies look at questions 1 and 2
+    * 37 studies look at questions 2 and 3
+    * Only 5 studies look at a combination of all questions
+
+* Future directions
+
+  * Database for proposed ecological variations
+  * Primary problems in transcriptomics:
+    * Bias in signals 
+    * polyploidy
+    * RNA pooling
+    * Statistical analyses
+    * Unannotated genes
+
+### Glossary
+
+* **Transcriptomics** - The study of the transcriptome which is the complete set of RNA transcript products by the genome
+
+* **QST-FST Comparisons** - A means to distinguish between genetic drift and natural selection in driving differentiation in a populations
+
+  * **QST** - Amount of variation in quantitative traits in a population
+
+  * **FST** - variation at neutral loci
+
+    ​
+
+
+## Paper Discussion
+
+### De Panis DN, Padro J, Furio-Tari P, et al. Transcriptome modulation during host shift is driven by secondary metabolites in desert Drosophila. Mol Ecol. 2016;25(18):4534-4550. doi:10.1111/mec.13785.
+
+Overview:
+
+* study of a desert *Drosophila buzzatii* in So. America
+
+* Cactophilic with primary cactus host: *Opuntia* and an occasional secondary host *Trichocereus*
+
+* Example of a paper that looks at variable environmental stimuli on gene expression
+
+
+Experimental design:
+
+* All samples collected in same environment
+* Created three inbred lines (3 genotypes) that represented three *common* inversions in *Drosophila* 
+* 4 treatments: **Table 1** 
+  * 2 assess host-plant effects
+  * 2 assess alkaloid effects
+* Also looked at **D**evelopmental **T**ime (DT) to evaluate the effects of each treatment on development from larvae to emergence of adults
+* Illumina paired-end short reads (150bp)
+  * Used quality score of >=26 (so about 99.5% accurate)
+* Used previously annotated reference genome of *D. buzzattii* as well as took annotations from other *Drosophila* spp. 
+
+Results
+
+* 78mil reads/tx with 85% of reads being mapped to reference genome and >10k genes could be annotate
+* 28% of the protein coding genes were DE (**D**ifferentially **E**xpressed) 
+* **Many** more genes are differentially expressed between native and alkaloid+ (2x) treatments 
+* DT of *Drosophila* reared in 2ndry host is longer than compared to the control
+
+Conclusions
+
+* Appears to be a dose-response in terms of gene expression of detox genes with varying levels (dosage) of alkaloids
+
+## Lab
+
+Goals:
+
+* Finish cleaning (trimming)
+* Fastqc (visualizing) 
+* Make table of # of reads
+* Design assembly tests 
+* Start assemblies 
+
+Skills:
+
+* scripts
+
+* **paths** 
+
+* program
+
+* input/output
+
+* **file names**
+
+* moving through directories 
+
+* moving files (from the server to your directory)
+
+  * **scp** (secure copy) to move from server to your PC
+
+* Executing scripts
+
+  * **bash** or **./** to run
+  * general format for calling programs
+
+  ​
+
+  # Command Line Codes
+
+  * **mv** moves files and can rename it
+    * *mv filename newfilename* (to rename)
+    * *mv filename newdirectory newfilename* (to move and rename)
+  * **fastqc** runs analysis to generate information on RNA-seq data
+    * *fastqc filename*
+  * **To move file from server to personal computer, use program WinSCP**
+    * Login to server from WinSCP
+    * Find file 
+    * Drag and drop into PC folder
+
+  # February 13, 2017
+
+  ## Info Update
+
+  ### RNA-Seq (~$2000/lane gives you ~160-200million reads)
+
+  * Background
+
+    * enables DE examination (interpopulation, individual)
+
+      * ex. disease resistance, mating behavior, adaptive significance
+
+    * molecular mechanism --> phenotypic/behavioral plasticity 
+
+      * ex. migration patterns 
+
+    * Limitations
+
+      * reference genome quality 
+      * gene annotation availability
+      * expense per sample library preparation 
+
+    * Issues
+
+      * Under utilization of biological replicates 
+        * requiring independent library preparations
+        * no pooled samples
+        * 23/158 studies (15%) >3 biological replications
+        * derive broad biological conclusions
+      * prioritize sequence depth over replication (problem)
+      * Wide dynamic range of RNA-seq data --> noisy data
+        * poisson counting error 
+        * technical variance (variance associated with methods)
+        * biological variance (the largest variance) 
+
+    * R example
+
+      * less (biological) variance gives higher power
+
+        ```r
+        source("https://bioconductor.org/biocLite.R")
+        biocLite("RNASeqPower")
+        library(RNASeqPower)
+
+
+        rep2<-rnapower(depth=10, n=2, cv=0.2, effect=c(1.5, 2, 2.5, 4), alpha=.05)
+        plot(rep2, type='b', col="blue", xlab="Effect size (fold change)",ylab="Power",ylim=c(0,1), lty=2)
+
+        rep3<-rnapower(depth=10, n=3, cv=0.2, effect=c(1.5, 2, 2.5, 4), alpha=.05)
+        points(rep3, type='b', col="purple", lty=2)
+
+        rep5<-rnapower(depth=10, n=5, cv=0.2, effect=c(1.5, 2, 2.5, 4), alpha=.05)
+        points(rep5, type='b', col="green", lty=2)
+
+        rep10<-rnapower(depth=10, n=10, cv=0.2, effect=c(1.5, 2, 2.5, 4), alpha=.05)
+        points(rep10, type='b', col="red", lty=2)
+
+        rep2V<-rnapower(depth=10, n=2, cv=0.6, effect=c(1.5, 2, 2.5, 4), alpha=.05)
+        points(rep2V, type='b', col="blue")
+
+        rep3V<-rnapower(depth=10, n=3, cv=0.6, effect=c(1.5, 2, 2.5, 4), alpha=.05)
+        points(rep3V, type='b', col="purple")
+
+        rep5V<-rnapower(depth=10, n=5, cv=0.6, effect=c(1.5, 2, 2.5, 4), alpha=.05)
+        points(rep5V, type='b', col="green")
+
+        rep10V<-rnapower(depth=10, n=10, cv=0.6, effect=c(1.5, 2, 2.5, 4), alpha=.05)
+        points(rep10V, type='b', col="red")
+        ```
+
+* General rules of thumb:
+
+  * More biological replicates instead of depth
+  * Sequence depth > 10 reads/transcript (sufficient to minimize technical and counting variance)
+    * ~10-20 million mapped reads/samples
+  * At least 3 biological replicates per treatment 
+  * Conduct a pilot experiment 
+    *  what is the best/most powerful experiment I can afford?
+    * What is the smallest fold-change I can detect?
+
+### Glossary
+
+* **Phenotypic plasticity** is the ability of an organism to change its **phenotype** in response to changes in the environment.
+* **sequence coverage** - the average number of reads that align/"cover" known reference bases
+* **read depth** - total number of bases sequenced/aligned at given reference base position
+* **statistical noise** - unexplained variation/randomness
+* **power** - probability of rejecting null hypotheses
+* **biological variation** - measurements due to environmental or genotypic difference
+* **effect size** - measured in fold change (the difference between control and treatment reads/transcript)
+
+## Paper discussion
+
+### Johnston RA, Paxton KL, Moore FR, Wayne RK, Smith TB. Seasonal gene expression in a migratory songbird. Mol Ecol. 2016;25(22):5680-5691. doi:10.1111/mec.13879.
+
+Overview:
+
+* What were the underlying mechanisms that allow birds to make great migrations every year?
+
+* This study could help indicate how birds will adapt to changing environments
+
+* Looked at two related species of songbirds (separated ~10kya)
+
+  * Swainson's thrushes (inland vs. coastal) that have very different migration routes (inland have a longer migration route)
+
+* Sampled (by "sacrificing") birds of both species at two different times (summer vs autumn, non-migratory season and migratory season, respectively)
+
+  * Determine migratory state by looking at 10minute intervals >20 movements
+
+* Sample sizes: 
+
+  * 4 non migratory inland
+  * 6 non migratory coastal
+  * 6 migratory inland
+  * 4 migratory coastal
+
+* Methods:
+
+  * RNA extracted and sequenced --> trimmed to remove adaptors
+  * Used different genus (collared flycatcher) as a reference genome
+  * Had plenty of mapped reads (~15-30 million reads)
+  * Principle component analysis to identify potential variables (biological and technical variance)
+    * linear regression for each gene with response variables (circadian rhythm, species type, migratory/non migratory)
+  * P-value will increase false positives (due to the high number of genes) so instead used Q value
+
+* Results
+
+  * Volcano plot - In statistics, a **volcano plot** is a type of scatter-**plot** that is used to quickly identify changes in large data sets composed of replicate data.
+
+  * A Q-value is a [p-value ](http://www.statisticshowto.com/p-value/)that has been adjusted for the False Discovery Rate(FDR).  A p-value gives you the probability of a false positive on a single test; If you’re running hundreds or thousands of tests from small samples (which are common in fields like genomics), you should use q-values. typically, Q values of 0.1 or 0.05 are used (in this case they used 0.2) Q values are derived from the 0.05 tail (uses predicted number of false positives 0.2 = 20% of the values in the 0.05 tail are false positives)
+
+    ​
+
+* Take-home messages:
+
+  * Found a suite of genes that are differentially expressed between migratory and non-migratory bird states
+
+  * Expected a set of genes to be DE but found other genes instead
+
+  * Think that neurogenesis is a big factor in the transition into migration
+
+    * neurogenesis - change in neural structure
+
+  * Certain genes act as "hubs" of gene expression networks
+
+    * one gene will affect the expression of many genes 
+    * **expression networks**
+
+    ​
+
+    ​
+
+## Lab
+
+### RNA-Seq Mapping
+
+* Pespeni used **Transdecoder** package to estimate longest open reading frame (ORFs)
+* **TrinityStats.pl** gives you sequence information (number of trinity genes, percent GC, contig lengths, etc.)
+
+To have a script running even when your computer is closed:
+
+* screen
+* bash bwaaln.sh
+* CTRL+a+d (detach)
+* screen -r (reattach) 
+
+To kill a process:
+
+* ctrl+c
 
