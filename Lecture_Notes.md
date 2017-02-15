@@ -22,7 +22,7 @@ Lecture notes, paper discussions, and coding done in and out of class.
 - [Entry 6: 2017-02-06](#id-section6)
 - [Entry 7: 2017-02-08](#id-section7)
 - [Entry 8: 2017-02-13](#id-section8).
-- [Entry 9: ](#id-section9).
+- [Entry 9: 2017-02-15 ](#id-section9).
 - [Entry 10: ](#id-section10).
 - [Entry 11: ](#id-section11).
 - [Entry 12:](#id-section12).
@@ -119,15 +119,15 @@ Lecture notes, paper discussions, and coding done in and out of class.
   * Examples from literature
 * What is Next-Gen sequencing? (Outline)
   1.     Advances in sequencing technology
-        1.     HumanGenome Project (finished ~2001-2003)
-              1.     Mostly with Sanger Sequencing (ABI)
-              2.     15years to complee
-              3.     1 person’s genome
-              4.     Cost~$3billion 
-        2.     IlluminaHiSeq X Ten (2014)
-              1.     1 day 45 whole genomes of a human
-              2.     $1000/eachgenome
-  2.     Range of applications
+  2.     HumanGenome Project (finished ~2001-2003)
+        1.     Mostly with Sanger Sequencing (ABI)
+        2.     15years to complee
+        3.     1 person’s genome
+        4.     Cost~$3billion 
+  3.     IlluminaHiSeq X Ten (2014)
+        1.     1 day 45 whole genomes of a human
+        2.     $1000/eachgenome
+  4.     Range of applications
         1.     Whole genome sequencing
         2.     RNAsequencing
         3.     ChIPSequencing (Chromatin Immunoprecipitation Sequencing)
@@ -138,24 +138,24 @@ Lecture notes, paper discussions, and coding done in and out of class.
               1.     Design probes (synthesized DNA) and hybridize with sample 
               2.     Pull targeted genes using probe
               3.     Need to have prior information about organism’s genome
-  3.     General library preparation workflow
+  5.     General library preparation workflow
         1.     Whatmay influence what technology you chose to use?
-              1.     Where is the targeted genetic variation?
+        2.     Where is the targeted genetic variation?
               2.       Scale/#samples
-              3.     Model vs. not model organism 
-              4.     Is there genomic information available?
-              5.     Whatare you looking for
+              3.       Model vs. not model organism 
+              4.       Is there genomic information available?
+              5.       Whatare you looking for
                     1.     Demographic history
                     2.     Adaptive genetic variation
                     3.     Gene expression variation 
                     4.     Length/number/distribution of reads 
-        2.     Work flow
+        3.     Work flow
               1.     Extraction (DNA, RNA, cDNA)
               2.     Fragment sample (break into smaller chunks)
               3.     Ligate adaptors on (individual barcodes)
               4.     Add sequence adaptors
               5.     PCR
-  4.     Sequencing-by-Synthesis(SBS)
+  6.     Sequencing-by-Synthesis(SBS)
         1.     Sample loaded on flow cell into a lane
         2.     Sample washes over oligos and attach
         3.     Bend over (bridge amplification)
@@ -218,34 +218,33 @@ What is QTN/QTL Programme?
   * Could be multiple viruses
 
 
-  * Symptoms also occur when they die (maybe can’tactivate catch collagen) 
-  * Healthy and sick in same populations 
-  * Slight association between SWD and warmer water temperatures 
-    * Epidemics peaks during warmest months
-    * Appears more prevalent in interdially than subtidally (warmer water, less constantàstressor)
-      * Potentially greater transmission in INT becauseof water current
-  * Could most vulnerable species be largepredators?
-  * Focusing on: *Pisasterochraceus* 
-    * Purple and orange
-    * Found from Alaska to Baja, California
-    * Vulnerable species (not as vulnerable as thesunflower star)
-    * Cannot maintain them in lab (die)
-    * Found in both tidal zones and generally the samediet (albeit maybe in different proportion) 
-  * What is causing the tipping point?
-    * Disruption in environment
-    * Microbiome
-  * *Pisasterochraceus*
-    * Our samples collected in Monterey area
-  * Hypotheses:
-    * Genetic difference between seastars in interdalvs. subtidal and related to susceptibility
-    * Gene expression differences between tidalregions
-    * Microbiome (H v S)
-    * Microbiome vs time 
-    * Relatedness v microbiome
-    * Expression of immune response GE
-      * E.g. RNAi
-      * Reverse pathology
-
+* Symptoms also occur when they die (maybe can’tactivate catch collagen) 
+* Healthy and sick in same populations 
+    * Slight association between SWD and warmer water temperatures 
+      * Epidemics peaks during warmest months
+      * Appears more prevalent in interdially than subtidally (warmer water, less constantàstressor)
+        * Potentially greater transmission in INT becauseof water current
+    * Could most vulnerable species be largepredators?
+    * Focusing on: *Pisasterochraceus* 
+      * Purple and orange
+      * Found from Alaska to Baja, California
+      * Vulnerable species (not as vulnerable as thesunflower star)
+      * Cannot maintain them in lab (die)
+      * Found in both tidal zones and generally the samediet (albeit maybe in different proportion) 
+    * What is causing the tipping point?
+      * Disruption in environment
+      * Microbiome
+    * *Pisasterochraceus*
+      * Our samples collected in Monterey area
+    * Hypotheses:
+      * Genetic difference between seastars in interdalvs. subtidal and related to susceptibility
+      * Gene expression differences between tidalregions
+      * Microbiome (H v S)
+      * Microbiome vs time 
+      * Relatedness v microbiome
+      * Expression of immune response GE
+        * E.g. RNAi
+        * Reverse pathology
 
 
 ------
@@ -296,7 +295,6 @@ What is QTN/QTL Programme?
 
 
 
- 
 
 ------
 
@@ -850,7 +848,6 @@ Skills:
     - Drag and drop into PC folder
 
 
-
 ------
 
 <div id='id-section8'/>
@@ -984,14 +981,135 @@ To kill a process:
 - ctrl+c
 
 
-
 ------
 
 <div id='id-section9'/>
 
-### Entry 9: 
+### Entry 9: 2017-02-15
+
+#### Lecture Notes
+
+##### Info Update: SNPs and Population Genetics
+
+###### Best Practices Guidelines:
+
+1) Tissue:
+
+* breadth of tissue, developmental stages
+* Issue with exon skipping (truncated but functional proteins)
+
+2) Pool & sequence libraries (~30-100m paired-end long reads)
+
+3) Process raw sequence data
+
+* important for SNP detection
+
+4) Digital normalization
+
+* remove high coverage reads and associated errors
+
+5) Assemble clean pair-end long reas
+
+6) Prune - reduce DNA contamination, non-coding RNA, gene fragments
+
+7) Assembly evaluation- reference genome, de novo
 
 
+
+###### SNP Detection and Evaluation
+
+* Software that looks for *constant* patterns of sequence variation 
+
+  * Problems:
+    * Sequence errors (eliminate SNPs of low frequency)
+    * Artifacts caused by InDels (filter SNP clusters near InDels; quality scores)
+
+* Applications:
+
+  * Differences in population structure
+
+  * Naturally acting on a particular loci
+
+  * **Outliers** 
+
+    * For a given locus, what is the level of differentiation compared to differences across a genome?
+
+      ![20170215graph](C:\Users\Erin\OneDrive\Documents\UVM\UVM Spring 2017\Ecological Genomics\20170215graph.jpg)
+
+  * **Non-Outlier Approach**
+
+    * Validates particular SNPs (above)
+    * Takes high FST values and tests them for other features associated with selection
+      * ex. enrichment for certain functional roles; fitness
+
+##### Paper Discussion
+
+###### Zhao X, Bergland AO, Behrman EL, Gregory BD, Petrov DA, Schmidt PS. (2016) Global transcriptional profiling of diapause and climatic adaptation in drosophila melanogaster. Mol Biol Evol. 33(3):707-720. doi:10.1093/molbev/msv263.
+
+* **Clinal SNP/Phenotype** - a phenotype that is related to a cline (latitude, weather, etc.)
+
+  * repeated target of selection over a season and space
+
+* This paper was interested in the phenotype: **diapause**
+
+  * **Diapause** - life history strategy characterized by reduced metabolic rate/inactivity/arrest development/delaying reproduction (analogous to hibernation) (diapause can occur at any life stage)
+    * Signaled by: temperature, nutrient availability, photoperiods(any condition that isn't conducive to activity) [this will vary across a cline!]
+    * Expect populations that are farther away from equators (colder, less sun) will exhibit diapause strategy
+
+* Experimental design:
+
+  * Isofemale lines (capture and maintain genetic diversity in a line) from Maine, Vermont, Mass, Connecticut --> allows outbreeding (these offspring are the individuals used in treatments)
+  * Applied treatment: reduced day length, reduced temperature
+  * Sampled diapause (D) and non-diapause (ND)
+  * 4 replicates of D and ND and two tissue types (head and ovaries - each fly - non independence)
+  * Sequenced 100bp short reads from Illumina 
+  * Used a reference genome to assembly (fruit fly)
+  * Measured gene expression 
+    * Counting isoforms (splice variants)
+
+* Gene expression analysis:
+
+  * Functional enrichment for genes that are differentially expressed
+    * Moran's I (positive I indicates positive spatial autocorrelation)
+
+* Results:
+
+  * Figure 1: there is differential gene expression in D vs. ND in both head and ovaries
+
+  * Table 1: Summary of number of differentially expressed genes
+
+  * Table 2: Summary of DE isoforms (need well-annotated reference genome)
+
+    * pick up on a lot more of DE than if you just look at the gene-level
+
+  * Figure 2: This venn diagram compares the number of genes that were not DE when taken as a whole gene but WERE DE in terms of isoforms --> many many more DE isoforms than whole genes 
+
+  * Table 3: Evaluates DE pathways 
+
+  * Table 4: Genes they found a priori to be important to diapause - no significant differences between D and ND
+
+  * Table 5: Isoforms of genes a priori important to diapause - these are significantly differentially expressed between D and ND
+
+  * Figure 3: Null distributions (created by randomization of starting point of genes) and lines indicate what they've found - Positive Moran's I indicates positive spatial correlation
+
+    * Looking at differences in chromosome position --> therefore, gene expression is related to position on a chromosome 
+    * Find clusters of highly expressed genes (spatially regulated?)
+
+  * Figure 4: Enrichment of differentially expressed genes
+
+    * Only genes that were down-regulated in head tissue were significantly associated with clinal and seasonal clines
+
+      ![20170215image1](C:\Users\Erin\OneDrive\Documents\UVM\UVM Spring 2017\Ecological Genomics\20170215image1.jpg)
+
+  * Take home:
+
+    * Responsive genes that vary in allele frequency and are DE are down-regulated in the head
+
+  #### Computer Lab
+
+  ​
+
+  ​
 
 ------
 
@@ -1344,5 +1462,8 @@ To kill a process:
 - **power** - probability of rejecting null hypotheses
 - **biological variation** - measurements due to environmental or genotypic difference
 - **effect size** - measured in fold change (the difference between control and treatment reads/transcript)
+- **SNPs** - Single nucleotide polymorphism; single base differs between 2 genomes
+- **InDels** - (insertions/deletions) single base has been detected/inserted into genome relative to another
+- **FST** - Percent of genetic material explained by differences among populations
 
 ------
