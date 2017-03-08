@@ -28,7 +28,7 @@ Lecture notes, paper discussions, and coding done in and out of class.
 - [Entry 12:](#id-section12).
 - [Entry 13:](#id-section13).
 - [Entry 14:](#id-section14).
-- [Entry 15:](#id-section15).
+- [Entry 15: Assignment #2 Script](#id-section15)
 - [Entry 16:](#id-section16).
 - [Entry 17:](#id-section17).
 - [Entry 18:](#id-section18).
@@ -1107,7 +1107,60 @@ To kill a process:
 
   #### Computer Lab
 
-  ​
+  * Had to rerun my bwaaln.sh script because I lost internet connection on Monday and so the script stopped running prematurely. The file names had been changed in the cleanreads directory so I edited my script to reflect the new file name
+  * Output saved to: ~/scripts/output_bwaaln_EK.txt (also moved to WinSCP)
+
+  ##### Sequence Alignment (SAM) files and Read Count Extraction
+
+  See [here](https://adnguyen.github.io/2017_Ecological_Genomics/Tutorial/2017-02-15_RNAseq_Map_Count.html) for scripts and tutorials for today's computer lab.
+
+  [Here](https://broadinstitute.github.io/picard/explain-flags.html) you can find a cheat-sheet of what each SAM flags (codes identifying quality/characteristics of reads)
+
+  1) bashed bwaaln_EK.sh script
+
+  ```r
+  bash bwaaln_EK.sh > output_bwaaln_EK.txt
+  ```
+
+  2) Made tail file
+
+  ```r 
+  tail -n 100 07_5-08_S_1_bwaaln.sam > tail.sam
+  ```
+
+  3) Set this sam file to nowrap
+
+  ```r 
+  vim tail.sam
+  :set nowrap
+  ```
+
+
+  J00160:63:HHHT2BBXX:4:2228:27509:49054  77      *       0       0       *       J00160:63:HHHT2BBXX:4:2228:27509:49054  141     *       0       0       *       J00160:63:HHHT2BBXX:4:2228:27671:49054  77      *       0       0       *       J00160:63:HHHT2BBXX:4:2228:27671:49054  141     *       0       0       *
+  J00160:63:HHHT2BBXX:4:2228:29579:49054  77      *       0       0       *       J00160:63:HHHT2BBXX:4:2228:29579:49054  141     *       0       0       *       J00160:63:HHHT2BBXX:4:2228:30310:49054  77      *       0       0       *       J00160:63:HHHT2BBXX:4:2228:30310:49054  141     *       0       0       *
+  J00160:63:HHHT2BBXX:4:2228:31040:49054  77      *       0       0       *       J00160:63:HHHT2BBXX:4:2228:31040:49054  141     *       0       0       *       J00160:63:HHHT2BBXX:4:2228:31061:49054  113     TRINITY_DN7499_c0_g1::TRINITY_DNJ00160:63:HHHT2BBXX:4:2228:31061:49054  177     TRINITY_DN7499_c0_g1::TRINITY_DN
+  J00160:63:HHHT2BBXX:4:2228:2067:49071   77      *       0       0       *       J00160:63:HHHT2BBXX:4:2228:2067:49071   141     *       0       0       *       J00160:63:HHHT2BBXX:4:2228:2615:49071   77      *       0       0       *       J00160:63:HHHT2BBXX:4:2228:2615:49071   141     *       0       0       *
+  J00160:63:HHHT2BBXX:4:2228:3183:49071   97      TRINITY_DN30233_c0_g1::TRINITY_DJ00160:63:HHHT2BBXX:4:2228:3183:49071   145     TRINITY_DN30233_c0_g1::TRINITY_DJ00160:63:HHHT2BBXX:4:2228:4056:49071   77      *       0       0       *       J00160:63:HHHT2BBXX:4:2228:4056:49071   141     *       0       0       *
+  J00160:63:HHHT2BBXX:4:2228:4279:49071   77      *       0       0       *       J00160:63:HHHT2BBXX:4:2228:4279:49071   141     *       0       0       *       J00160:63:HHHT2BBXX:4:2228:4401:49071   77      *       0       0       *
+  :set nowrap  
+  ```
+
+  4) Counts for uniquely expressed reads (See [here](https://adnguyen.github.io/2017_Ecological_Genomics/Tutorial/2017-02-15_RNAseq_Map_Count.html) for information on different BWA man values
+
+  ```r
+  grep -c XT:A:U 07_5-08_S_1_bwaaln.sam
+  5325616
+
+  grep -c X0:i:1 07_5-08_S_1_bwaaln.sam
+  5436410
+
+  ```
+
+  ##### Sed - 
+
+```r
+  sed -i 's/::/\_/g' 07_5-08_S_1_bwaaln.sam
+```
 
   ​
 
@@ -1115,15 +1168,54 @@ To kill a process:
 
 <div id='id-section10'/>
 
-### Entry 10: 
+### Entry 10: 2017-02-22
 
+#### Paper Discussion
 
+###### Dixon GB, Davies SW, Aglyamova GA V., Meyer E, Bay LK, Matz M V. 2015. Genomic determinants of coral heat tolerance across latitudes. Science. 348(6242):1460-1462. doi:10.1126/science.1261224.
+
+Experimental design:
+
+* took gametes from two environments (warm vs. cooler) and made crosses
+* Tested offspring of different genetic background against heat gradient
+* Calculated survivorship for each offspring
+  * heritable, mainly through maternal genetics
+
+### Computer Lab 
+
+#### DESeq in R tutorial 
+
+* Downloaded DESeq2 into R
+
+  [Here](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) is the DESeq2 manual 
+
+  Reference: Love MI, Huber W and Anders S (2014). “Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.” *Genome Biology*, **15**, pp. 550. [doi: 10.1186/s13059-014-0550-8](http://doi.org/10.1186/s13059-014-0550-8).
+
+  ```source("https://bioconductor.org/biocLite.R")```
+
+  ```biocLite("DESeq2")```
+
+* Copied DGE files from /data/project_data/DGE on server into my PBIO file on my personal computer using WinSCP
+
+  * OneDrive/Documents/UVM/Spring 2017/Ecological Genomics/PBIO
+
+* DESeq2_exploreSSW_trim.R file
+
+  * Reads that mapped to assembly 
+  * 65 of the samples out of 93 samples (just because too much data for R)
 
 ------
 
 <div id='id-section11'/>
 
-### Entry 11: 
+### Entry 11: 2017-02-27
+
+### Computer Lab
+
+* New data set: DESeq2_SSW_round2.R discards shorter splice variants and keeps only longest isoform so exons only map to the long isoform rather than the program discarding the read because it mapped to two isoforms. Now 30-40% of reads map rather than 10%.
+* Moved DESeq2_SSW_round2 into PBIO DATA director
+* Opened above file in R Studio and reran all commands in script
+
 
 
 
@@ -1131,27 +1223,523 @@ To kill a process:
 
 <div id='id-section12'/>
 
-### Entry 12:
+### Entry 12: 2017-03-01
+
+### Class Notes
+
+* (Log) Likelihood Ratio Test (LRT) -a statistical approach that looks at a distribution and sees if there is a statistical difference between values.
+
+  * How well does a model explain the data
+
+  * There is a "full model" and a "reduced model" where the full contains all data points and the reduced model some terms are removed. The program then assesses if there is a better likelihood with more terms (full) versus less (reduced).
+
+    * The likelihood will **always** go down with the reduced model, it matters how much does it go down is what matters
+    * Due to the principle of parsimony, the simpler model is best and if they are not significantly different we would accept the reduced model
+    * Reduced model has more power because there are fewer parameters and are easier to falsify
+
+  * Ex: likelihood (full model) = H, D, HCD whereas likelihood(reduced) = H,D
+
+  * Difference (change in likelihood) = log((likelihood(full)-likelihood(reduced))
+
+  * LR ~ X^2, df = # of parameters in full model - # of parameters in reduced model
+
+  * See [DESeq](https://www.bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2_pdf.pdf) tutorial/manual 
 
 
+### Homework Assignment #2 - due next Wednesday!
+
+* Compare healthy v. sick individuals 2 different ways (within intertidal, within subtidal) then with location as a factor.
+* Description of assignment 2 will be posted soon
+* Do it for ENTIRE data set, not just 1200 samples!
+
+### Info Update: WGCNA
+
+* Outline
+
+  * Overview of WGCNA
+  * Network Construction
+  * Module Detection
+  * Incorporation of external info into network
+  * Topological properties
+  * Other features
+  * limitations 
+
+* **WGCNA** - weighted gene correlation network analysis
+
+  * R package - apply correlation network methods to describe correlation (co-expression) patterns among genes in micro-array samples
+
+  * Network construction --> module identification --> relationship of modules to external information --> Relationship between/wihin modules --> finding key drivers in modules of interest
+
+  * Network Construction (rational = make use of interaction patterns)
+
+    * Nodes are genes
+
+    * Edges - strength of correlation in expression
+
+    * Package provides different co-expression measures
+
+    * Signed networks - positive and negative correlation in expression
+
+    * Unsigned networks - absolute value of correlation in expression 
+
+    * Input as a matrix:
+
+      ![matrix wgcna](C:\Users\Erin\OneDrive\Documents\UVM\UVM Spring 2017\Ecological Genomics\matrix wgcna.jpg)
+
+    * From the matrix you can identify correlations between each set of genes
+
+    * Then from this, you can identify modules that are correlated with each other 
+
+    * Unweighted analyses (network analyses)
+
+      * hard threshold to determine if genes are linked in terms of expression
+
+    * Weighted (P.P.)
+
+      * allows for continuous rather than discrete thresholds (hard and soft thresholds)
+
+  * Module detection (rational = reduction of dataset, increase in power)
+
+    * module - cluster of highly connect genes
+    * unsupervised cluster - no a priori defined sets of genes. So this uses weighted vs. unweighted information to eliminate weak connections and keep only highly significant correlations (i.e. highly significant edges). A module from this will be genes that are all highly significantly correlated with each other 
+    * summarize profiles of modules (involves eigengene) 
+
+  * Relating modules with external information
+
+    * depends on questions
+    * Gene Significance (G.S.) --> tell you whether you gene is associated with a trait of interest
 
 ------
 
 <div id='id-section13'/>
 
-### Entry 13:
+### Entry 13: 2017-03-06
+
+### Info Update:
+
+#### Population genomics: 
+
+* SNPs, lots of them! (transcriptome/genome wide)
+* Sampling  unit is individuals (although as WGA becomes cheaper, we can expect this to be less of a constraint)
+  * within species
+* Processes:
+  * population structure (between)
+  * diversity (within) 
+  * Selection (nonsynonymous vs. synonymous mutations)
+    * positive 
+    * negative, "Purifying"
+* Pipeline:
+  * Raw reads --> clean --> assemble (draft transcriptome) --> mapped reads --> two possibilites:
+    * Count number of reads/transcript --> differential gene expression
+    * Call SNPs(is a locus variable?)/Call genotypes --> "Population Genomics" allele frequencies, SFS, nucleotide diversity (pi)
+* Calling SNPs & genotypes
+  * Challenges of SNPs:
+    * sequencing error (Illumina has a 1% error rate) so 1:100 bases are called incorrectly 
+      * **Minor Allele Frequency** - a filter asking "how many individuals have this SNP?" if they are rare across individuals, they are better left discarded. Think about depth! 1 in 20 reads have a different allele --> sequencing error. 1 in 4 reads have a different allele --> less sure if it is an error
+  * Challenges of genotype calling:
+    * Determining heterozygotes vs. homozygotes - use a multinominal distribution to determine what the probability of the individual being a homo/heterozygote
+      * If you can't say with confidence the genotype, better left discarded
+      * Bayesian statistics - incorporate probabilities on when you determine population genetics statistics (this is where the field is heading)
+    * Paralogy
+      * duplicated gene (either right next to or far away from the first gene)
+      * E.x. A vs B (the more recently the gene was duplicated the more similar the gene sequences will be) if they are very similar than the reads of B will be mapped to A (so every individual could be a heterozygote due to paralogy)
+      * If you look across individuals in the sample and they are all heterozygotes, they will deviate from HWE so we can discard them
+  * Pi
+    * Pairwise nucleotide diversity 
+    * Equivalent to expected heterozygosity at sequence level
+    * Seqeunces i + j, pi =  Sum of (xi * xj * bp differences) often scaled by the number of sites (%)
+    * Pi (synonymous sites) = 4Neu
+    * Pi (nonsynonymous sites) = higher risk of selection ("Purifying")
+    * Ratio of Pin/Pis as a measure of how much selection is acting on the population (no selection, ratio = 1, with selection <1)
+
+### Paper Discussion
+
+#### Gayral et al. 2013
+
+* Expectations:
+  * Small Ne will have lower Pin and Pis and a smaller ratio of the two due to genetic drift 
+* Challenges
+  * Paralog filtering 
+  * Low number of reads (<1million compared to out 30 million)
+* Paralogy vs. orthology
+  * Paralogs are gene duplicates within species
+  * Orthologs are the same genes between species
+* Take home message:
+  * They said that the methods fared well compared to traditional methods (other studies)
 
 ------
 
 <div id='id-section14'/>
 
-### Entry 14:
+### Entry 14: 2017-03-08
+
+### Info Update - Effective Population Size (Ne) and Diversity
+
+* Ne - effective population size
+
+  * 4 methods measure Ne:
+    * from species life history --> Ne = 4NmNf/(Nm+Nf) [how many individuals can mate in the population]
+    * from variance in allele frequency between generations  [the difference in allele frequencies between generations indicate amount of drift, etc. in the population and allows us to estimate Ne -- fisheries use this metho]
+    * From genetic polymorphism data
+    * From correlated traits (e.g. body size)
+  * Ne varies across species and genome!
+    * Genome Ne varies because:
+      * genetic hitchhiking ~= selective sweep --| when recombination does not occur
+      * background selection --------------------|
+      * Decreased sex chromosomes; increased # autosomal chromosomes
+        * males have a higher mutation rate than females and most mutation comes from the males... this is because males make gametes throughout their life and the Y chromosome doesn't have a homologous chromosomes so mutations are often not detected
+
+* Mutation (u)
+
+  * Raw material for evolution
+  * Mutations can occur at different levels
+    * Across whole gene or chromosome 
+      * duplication
+      * inversion
+      * deletion
+      * translocation
+    * base level = point mutations (substitutions)
+      * transitions (purine<-->purine/pyrimidine<-->pyrimidine)
+      * transversion (purine <--> pyrimidine)
+      * Two types of point mutations:
+        * synonymous = silent mutations [natural selection "doesn't act" on these mutations so changes in frequencies of these mutations are due to drift]
+        * non-synonymous = replacement mistake --> missense/nonsense
+    * 5 mutation classes (w means fitness)
+      * neutral (w ~= 0 or <1/Ne) No N.S.; only drift
+      * slightly deleterious (small effect w; haploid: 1/Ne; diploid: 1/2Ne) N.s. and drift
+      * slightly advantageous (small effect w; haploid: 1/Ne; diploid: 1/2Ne) N.s. and drift
+      * completely deleterious (big effect w or >1/Ne) (-) NeRR (RR = substitution rate)
+      * completely advantageous (big effect w or >1/Ne) (+) NeRR
+  * Variation in mutation rate
+    * generation time [short generation time --> high mutation rate--> increase Ne]
+    * selection [reduces # mutations --> decrease Ne]
+
+* NeRR and Linkage
+
+  * selective sweeps
+  * clonal interference (when 2 or more adaptive mutations originate in different individuals compete for fixation in a population)
+
+* NeRR and Spontaneous Variation
+
+  * not as much literature on this subject
+
+* NeRR and All mutation DEF (distribution of fitness effects)
+
+  * U-shape
+
+    ![NeRR-DEF](C:\Users\Erin\OneDrive\Documents\UVM\UVM Spring 2017\Ecological Genomics\NeRR-DEF.jpg)
+
+* Take Home messages:
+
+  * study of NeRR help us to understand the process tat drives and limits populations
+  * Drift and selection are the most important forces determining NeRR
+    We need to work on a better way to estimate Ne
+  * With time, DNA sequencing will become cheapter and will let us estimate better Ne, substitution rate, mutation rates
+  * Most mutations are deleterious
+  * Theta = Neu (haploid), 2Neu (1 sex diploid) 4Neu (2 sexes diploid species)
+    * theta is roughly equal to Pisyn
+    * Ne = Pi/4u
+
+### Paper Discussion
+
+#### Comparative population genomics in animals uncovers the determinants of genetic diversity (Romiguier et al. 2014)
+
+* Purpose: determine factors that influence Ne across metazoans 
+* Methods:
+  * Collected information on metaozans in different phyla (8 phyla)
+    * ~ 10 individuals/species (76 non-model species)
+  * Collected data on different life history traits
+  * Sequenced transcriptions  --> RNA seq data --> ID SNPs --> estimates syn and nonsyn nucleotide diversity
+    * 50-100 bp fragments
+    * motif enrichment - another way to clean data
+    * de novo transcriptome assembly 
+    * Only retained genotypes > 95%
+    * SNPs filtered for hidden paralogues
+
+
+
+### Computer Lab - Population Genetics Day 2
+
+```
+$ cd /data/project_data/snps/reads2snps/SSW_byind.txt.vcf.gz 
+$  vcftools --gzvcf SSW_byind.txt.vcf.gz ## After filtering, kept 22 out of 22 Individuals
+After filtering, kept 7485987 out of a possible 7485987 Sites
+$ vcftools --gzvcf SSW_byind.txt.vcf.gz --min-alleles 2 --max-alleles 2 --maf 0.02 --max-missing 0.8 --recode --out ~/SSW_all_biallelic.MAF0.02.Miss0.8 ## setting min and max alleles to 2 ensures we are only looking at diallelic loci ##After filtering, kept 22 out of 22 Individuals
+Outputting VCF file...
+After filtering, kept 5565 out of a possible 7485987 Sites
+$ gzip SSW_all_biallelic.MAF0.02.Miss0.8.recode.vcf # this zips the data 
+$ vcftools --gzvcf SSW_all_biallelic.MAF0.02.Miss0.8.recode.vcf.gz --hardy # this will rerun the test for HWE 
+$ head out.hwe # this will allow us to peek into the output file we just created
+$ R # opens R code in terminal
+$ hwe <- read.table("out.hwe", header=TRUE) # using R code to read the output file into a table
+$ str(hwe) # to look at the structure of the output file # 
+#----------------------------------------------------------------------
+#'data.frame':   1464 obs. of  8 variables:
+# $ CHR               : Factor w/ 363 levels #"TRINITY_DN27892_c0_g1_TRINITY_DN27892_c0_g1_i1_g.3123_m.3123",..: 358 358 358 358 358 358 #358 358 358 358 ...
+# $ POS               : int  4733 5850 5865 5869 5874 6096 6146 6201 6289 6325 ...
+# $ OBS.HOM1.HET.HOM2.: Factor w/ 52 levels "10/0/12","10/10/2",..: 36 51 36 36 36 36 36 29 36 #48 ...
+# $ E.HOM1.HET.HOM2.  : Factor w/ 22 levels "10.23/9.55/2.23",..: 14 1 14 14 14 14 14 11 14 1 #...
+# $ ChiSq_HWE         : num  0.0119 1.4547 0.0119 0.0119 0.0119 ...
+# $ P_HWE             : num  1 0.361 1 1 1 ...
+# $ P_HET_DEFICIT     : num  1 0.954 1 1 1 ...
+# $ P_HET_EXCESS      : num  1 0.276 1 1 1 ...
+#----------------------------------------------------------------------
+$ summary(hwe) # to get the summary information of the HWE output file
+# TRINITY_DN45147_c0_g1_TRINITY_DN45147_c0_g1_i3_g.18680_m.18680:  34
+# TRINITY_DN46382_c0_g1_TRINITY_DN46382_c0_g1_i1_g.22149_m.22149:  28
+# TRINITY_DN45750_c0_g1_TRINITY_DN45750_c0_g1_i2_g.20209_m.20209:  27
+# TRINITY_DN47302_c3_g1_TRINITY_DN47302_c3_g1_i2_g.25471_m.25471:  21
+# TRINITY_DN46789_c1_g3_TRINITY_DN46789_c1_g3_i1_g.23393_m.23393:  20
+# TRINITY_DN46938_c1_g1_TRINITY_DN46938_c1_g1_i1_g.24007_m.24007:  19
+# (Other)                                                       :1315
+#      POS         OBS.HOM1.HET.HOM2.        E.HOM1.HET.HOM2.
+# Min.   :   1.0   21/1/0 :822        21.01/0.98/0.01:822
+# 1st Qu.: 179.0   20/2/0 :202        20.05/1.91/0.05:240
+# Median : 321.0   19/3/0 : 96        19.10/2.80/0.10:103
+# Mean   : 630.5   18/4/0 : 69        18.18/3.64/0.18: 82
+# 3rd Qu.: 728.2   17/5/0 : 44        17.28/4.43/0.28: 60
+# Max.   :6511.0   21/0/1 : 38        16.41/5.18/0.41: 29
+#                  (Other):193        (Other)        :128
+#   ChiSq_HWE             P_HWE           P_HET_DEFICIT
+# Min.   : 0.000094   Min.   :0.0000004   Min.   :0.0000004
+# 1st Qu.: 0.011898   1st Qu.:1.0000000   1st Qu.:1.0000000
+# Median : 0.011898   Median :1.0000000   Median :1.0000000
+# Mean   : 0.943981   Mean   :0.9194100   Mean   :0.9216362
+# 3rd Qu.: 0.117787   3rd Qu.:1.0000000   3rd Qu.:1.0000000
+# Max.   :22.000000   Max.   :1.0000000   Max.   :1.0000000
+
+#  P_HET_EXCESS
+# Min.   :0.0005731
+# 1st Qu.:0.9767442
+# Median :1.0000000
+# Mean   :0.9432001
+# 3rd Qu.:1.0000000
+# Max.   :1.0000000
+
+$ which(hwe$P_HET_DEFICIT<0.01) # this will tell us which rows in the data frame under the column P_HET_DEFICIT that have a p-value < 0.01
+# [1] 1001 1021 1023 1300 1302 1320 1407 1409 # so these are the row numbers that correspond to transcripts
+$ hwe[which(hwe$P_HET_DEFICIT<0.01),] # this will print out all rows that satisfy the criteria and print out all corresponding columns as well
+# 1001 TRINITY_DN45155_c27_g2_TRINITY_DN45155_c27_g2_i2_g.18743_m.18743 216
+# 1021 TRINITY_DN45155_c27_g1_TRINITY_DN45155_c27_g1_i1_g.18742_m.18742  99
+# 1023 TRINITY_DN45155_c27_g1_TRINITY_DN45155_c27_g1_i1_g.18742_m.18742 138
+# 1300     TRINITY_DN39079_c3_g1_TRINITY_DN39079_c3_g1_i1_g.8354_m.8354 244
+# 1302     TRINITY_DN39079_c3_g1_TRINITY_DN39079_c3_g1_i1_g.8354_m.8354 279
+# 1320     TRINITY_DN39696_c4_g1_TRINITY_DN39696_c4_g1_i1_g.8926_m.8926 283
+# 1407   TRINITY_DN42225_c1_g1_TRINITY_DN42225_c1_g1_i1_g.12458_m.12458 220
+# 1409   TRINITY_DN42225_c1_g1_TRINITY_DN42225_c1_g1_i1_g.12458_m.12458 255
+#      OBS.HOM1.HET.HOM2. E.HOM1.HET.HOM2. ChiSq_HWE        P_HWE P_HET_DEFICIT
+# 1001             20/0/2  18.18/3.64/0.18        22 1.701645e-03  1.701645e-03
+# 1021            10/0/12  4.55/10.91/6.55        22 3.671957e-07  3.671957e-07
+# 1023             17/0/5  13.14/7.73/1.14        22 1.061317e-05  1.061317e-05
+# 1300            12/0/10  6.55/10.91/4.55        22 3.671957e-07  3.671957e-07
+# 1302             20/0/2  18.18/3.64/0.18        22 1.701645e-03  1.701645e-03
+# 1320            12/0/10  6.55/10.91/4.55        22 3.671957e-07  3.671957e-07
+# 1407            10/0/12  4.55/10.91/6.55        22 3.671957e-07  3.671957e-07
+# 1409             20/0/2  18.18/3.64/0.18        22 1.701645e-03  1.701645e-03
+#      P_HET_EXCESS
+# 1001            1
+# 1021            1
+# 1023            1
+# 1300            1
+# 1302            1
+# 1320            1
+# 1407            1
+# 1409            1 
+
+# notice that 3 loci that have heterozygote deficiency all belong to the same gene i.e. evidence of linkage 
+
+$ q() # to get out of R
+#now we are back to our command line
+$ cd /data/project_data/snps/reads2snps/ # to change directories to the project data
+$ vim ssw_healthloc.txt # to look into this file... if want a read only (and are prompted) --> O
+$ grep "HH" ssw_healthloc.txt > ~/H_OneSampPerInd.txt # this works similar to "which" in R and the carat indicates that we are saving the output file to our home directory
+$ "SS" ssw_healthloc.txt > ~/S_OneSampPerInd.txt
+$ grep "HS" ssw_healthloc.txt >> ~/S_OneSampPerInd.txt # the double carat will concatenate the data
+$ cd ~
+#cat will print one-screen worth's 
+$ cat H_OneSampPerInd.txt
+# 10      HH      INT     N
+# 24      HH      INT     Y
+# 27      HH      INT     Y
+# 31      HH      SUB     Y
+# 32      HH      SUB     Y
+# 33      HH      SUB     Y
+# 34      HH      SUB     N
+# 35      HH      SUB     Y
+$ cut -f 1 H_OneSampPerInd.txt > H_OneSampPerInd.txt # this will take just the first column of the data and override the old file (because we have the same file name for the output).... we should have renamed it because there was nothing in the file! # went back and saved the cut version as H_OneSampPer_Ind2.txt
+$ vcftools --gzvcf SSW_all_biallelic.MAF0.02.Miss0.8.recode.vcf.gz --freq2 --keep H_OneSampPerInd2.txt --out H_AlleleFreqs # freq2 gives the frequency of SNPs and the keep indicates we only want to keep the individuals in the H_on... file 
+# After filtering, kept 6 out of 22 Individuals
+# Outputting Frequency Statistics...
+# After filtering, kept 5565 out of a possible 5565 Sites
+
+$  cut -f 1 S_OneSampPerInd.txt > S_OneSampPerInd2.txt
+$ vcftools --gzvcf SSW_all_biallelic.MAF0.02.Miss0.8.recode.vcf.gz --freq2 --keep S_OneSampPerInd2.txt --out S_AlleleFreqs
+# After filtering, kept 14 out of 22 Individuals
+# Outputting Frequency Statistics...
+# After filtering, kept 5565 out of a possible 5565 Sites
+
+$ vim S_AlleleFreqs # to peek into output file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+```
+
+
+
+
 
 ------
 
 <div id='id-section15'/>
 
-### Entry 15:
+### Entry 15: Assignment #2 Script
+
+```
+### Ecological Genomics Assignment #2
+### Erin L. Keller
+### 7 March 2017
+
+# First we need to load in DESeq
+library(DESeq2)
+library("ggplot2")
+
+# Then we must subset the data by site, so intertidal and subtidal samples are separated by location.
+conds <- read.delim("cols_data_trim.txt", header=TRUE, stringsAsFactors=TRUE, row.names=1)
+head(conds)
+colData <- as.data.frame(conds)
+head(colData)
+IntConds <- conds[conds$location == "int",]
+head(IntConds)
+dim(IntConds)
+SubConds <- conds[conds$location == "sub",]
+head(SubConds)
+dim(SubConds)
+
+countsTable <- read.delim('countsdata_trim2.txt', header=TRUE, stringsAsFactors=TRUE, row.names=1)
+dim(countsTable)
+countData <- as.matrix(countsTable)
+head(countData)
+IntcountData<-countData[, which(colnames(countData) %in% row.names(IntConds))]
+SubcountData<-countData[, -which(colnames(countData) %in% row.names(IntConds))]
+dim(IntcountData)
+dim(SubcountData)
+
+# Now we can calculate the differential gene expression within each location (now intertidal) and comparing the status of individuals (H v S)
+ddsInt <- DESeqDataSetFromMatrix(countData = IntcountData, colData = IntConds, design = ~ health)
+dim(ddsInt)
+ddsInt <- ddsInt[ rowSums(counts(ddsInt)) > 100, ]
+dim(ddsInt)
+colData(ddsInt)$health <- factor(colData(ddsInt)$health, levels=c("H","S"))
+ddsInt <- DESeq(ddsInt) 
+resInt <- results(ddsInt)
+resInt <- resInt[order(resInt$padj),]
+head(resInt)
+summary(resInt)
+
+# Now we can calculate the differential gene expression within each location (now subtital and comparing the status of individuals (H v S)
+ddsSub <- DESeqDataSetFromMatrix(countData = SubcountData, colData = SubConds, design = ~ health)
+dim(ddsSub)
+ddsSub <- ddsSub[ rowSums(counts(ddsSub)) > 100, ]
+dim(ddsSub)
+colData(ddsSub)$health <- factor(colData(ddsSub)$health, levels=c("H","S"))
+ddsSub <- DESeq(ddsSub) 
+resSub <- results(ddsSub)
+resSub <- resSub[order(resSub$padj),]
+head(resSub)
+summary(resSub)
+
+# Using the following model (model 1 from DESeq2_SSW_rund2.R) which calculates differential gene expression by status of the individual (healthy v. sick) by controlling for location.
+ddsFull <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = ~ location + health)
+dim(ddsFull)
+ddsFull <- ddsFull[ rowSums(counts(ddsFull)) > 100, ]
+dim(ddsFull)
+colData(ddsFull)$health <- factor(colData(ddsFull)$health, levels=c("H","S"))
+ddsFull <- DESeq(ddsFull) 
+resFull <- results(ddsFull)
+resFull <- resFull[order(resFull$padj),]
+head(resFull)
+summary(resFull)
+
+# Now we can graph some of the results to visualize the results
+dFull <- plotCounts(ddsFull, gene="TRINITY_DN43080_c1_g1_TRINITY_DN43080_c1_g1_i3_g.14110_m.14110", intgroup=(c("health","score","location")), returnData=TRUE)
+dFull
+pFull <- ggplot(dFull, aes(x= score, y=count, shape = health, color = location)) + theme_minimal() + theme(text = element_text(size=20), panel.grid.major = element_line(colour = "grey"))
+pFull <- pFull + geom_point(position=position_jitter(w=0.3,h=0), size = 3) 
+pFull
+
+pFull <- ggplot(dFull, aes(x=score, y=count, color=location, group=health)) 
+pFull <- pFull +  geom_point() + stat_smooth(se=FALSE,method="loess") +  scale_y_log10()
+pFull
+
+# Count vs Score Plot (Intertidal)
+dInt <- plotCounts(ddsInt, gene="TRINITY_DN43080_c1_g1_TRINITY_DN43080_c1_g1_i3_g.14110_m.14110", intgroup=(c("health","score","location")), returnData=TRUE)
+dInt
+pInt <- ggplot(dInt, aes(x= score, y=count, color = health)) + theme_minimal() + theme(text = element_text(size=20), panel.grid.major = element_line(colour = "grey"))
+pInt <- pInt + geom_point(position=position_jitter(w=0.3,h=0), size = 3) 
+pInt
+
+pInt <- ggplot(dInt, aes(x=score, y=count, color=health)) 
+pInt <- pInt +  geom_point() + stat_smooth(se=FALSE,method="loess") +  scale_y_log10()
+pInt
+
+# Count vs Score Plot (subtidal)
+dSub <- plotCounts(ddsSub, gene="TRINITY_DN42073_c0_g1_TRINITY_DN42073_c0_g1_i1_g.12173_m.12173", intgroup=(c("health","score","location")), returnData=TRUE)
+dSub
+pSub <- ggplot(dSub, aes(x= score, y=count, color = health)) + theme_minimal() + theme(text = element_text(size=20), panel.grid.major = element_line(colour = "grey"))
+pSub <- pSub + geom_point(position=position_jitter(w=0.3,h=0), size = 3) 
+pSub
+
+pSub <- ggplot(dSub, aes(x=score, y=count, color=health)) 
+pSub <- pSub +  geom_point() + stat_smooth(se=FALSE,method="loess") +  scale_y_log10()
+pSub
+
+# PCA (Principle Component Analysis) for Intertidal data
+vsdInt <- varianceStabilizingTransformation(ddsInt, blind=FALSE)
+
+plotPCA(vsdInt, intgroup=c("score"))
+plotPCA(vsdInt, intgroup=c("health"))
+plotPCA(vsdInt, intgroup=c("day"))
+
+# PCA plots for Subtidal data
+vsdSub <- varianceStabilizingTransformation(ddsSub, blind=FALSE)
+
+plotPCA(vsdSub, intgroup=c("score"))
+plotPCA(vsdSub, intgroup=c("health"))
+plotPCA(vsdSub, intgroup=c("day"))
+
+# PCA plots for all data
+vsdFull <- varianceStabilizingTransformation(ddsFull, blind=FALSE)
+
+plotPCA(vsdFull, intgroup=c("score"))
+plotPCA(vsdFull, intgroup=c("health"))
+plotPCA(vsdFull, intgroup=c("day"))
+plotPCA(vsdFull, intgroup=c("location"))
+plotPCA(vsdFull, intgroup=c("health","location"))
+
+DESeq2:::plotPCA.DESeqTransform
+
+```
+
+
 
 ------
 
@@ -1465,5 +2053,25 @@ To kill a process:
 - **SNPs** - Single nucleotide polymorphism; single base differs between 2 genomes
 - **InDels** - (insertions/deletions) single base has been detected/inserted into genome relative to another
 - **FST** - Percent of genetic material explained by differences among populations
+- **Coalescent** - 
+- **Reticulation** - 
+- **Purifying/background selection** - 
+- **Gene trees vs. species** - 
+- **Introgression/recombination** - introduction of a gene complex via hybridization 
+- **Incomplete lineage sorting (ILS)** - failure of a gene to coalesce in ancestral species (haven't diverged completely)
+- **Module**- clusters of highly corrected genes
+- **Connectivity** - For each gene, sum of connection strength with other network genes
+- **Intro molecular connectivity** - how connected a gene is to other genes of its module
+- **Molecular Eigengene** - first principal component of a given module
+- **eigengene significance** - when a sample trait is available, one can correlate the module eigengene with this outcome
+- **Gene significance** - measure to determine biological significance of a particular gene/module with respect to a trait (external information)
+- **Paralog** - gene duplicate
+- **Pi**- pairwise nucleotide diversity
+- **SFS** - Site Frequency Spectrum = histogram of allele frequencies
+- **Ne** - effective population size; the size of a randomly mating population
+- **Mutation** - source of all new alleles and genes
+- **DEF** - Distribution of fitness effects; continuum selective effect on fitness
+- **genetic hitchiking** - Selective sweeps; strong and selective act on an amino acid change carrying out neutral or deleterious mutations
+- **Background selection ** - selection; strong selection removes positive or neutral mutations
 
 ------
