@@ -1745,25 +1745,503 @@ DESeq2:::plotPCA.DESeqTransform
 
 <div id='id-section16'/>
 
-### Entry 16:
+### Entry 16: 2017-03-22
+
+### Paper Discussion
+
+Genomic inference accurately predicts the timing and severity of a recent bottleneck in a nonmodel insect
+
+### Computer lab
+
+* Below is the script for today's computer work with annotations done on the server.
+
+```
+ 
+$ cd /data/project_data/snps/reads2snps
+$ screen # this will allow programs to run even when computer is off
+$ /data/popgen/dNdSpiNpiS_1.0 -alignment_file=SSW_by24inds.txt.fas -ingroup=sp -out=~/dNdSpiNpiS_output
+# ctrl + a then d will bring it back to your original screen (detaches from screen)
+# to reattach you do: screen -r (reattach to analysis)
+$ cat SSW_bamlist.txt.sum # previous results of smaller set of data
+#################################################################################
+#                              Biological Summary                              #
+################################################################################
+
+Selected ingroup species: sp
+
+Number of analyzed individual: 24 (from 1 population(s))
+
+Total number of contig used for sequence analysis: 1113
+
+Total number of SNPs: 5040
+
+  - Biallelic: 4991
+  - Triallelic: 49
+  - Quadriallelic: 0
+
+Fit:
+
+Average Fit: -0.0507419 [-0.06817; -0.031933] # so seastars don't appear to be inbreeding. HIgh Fit values indicate inbreeding
+(Fit calculated in 902 contigs)
+
+Weir & Cockerham Fit (Evolution 1984):
+
+Average Weir & Cockerham Fit: 0.00703754 [-0.017669; 0.032047]
+(Fit calculated in 902 contigs)
+
+piN/piS ratio: # piN number of pairwise differences in nonsynonymous sites vs piS synonymous sites
+
+Average piS in focal species: 0.00585312 [0.005172; 0.006598]
+Average piN in focal species: 0.00154546 [0.00133; 0.001782]
+Average piN / average piS: 0.264041 [0.223914; 0.310575] # higher ratio indicates there are more deleterious mutations that haven't been cleared out via selection # we need to put this in context which is why we will compare to Romiguier's table
+(piS and piN calculated in 902 contigs of average length 50)
+
+# downloaded the following file to my computer using WinSCP /data/project_data/snps/reads2snps/Romiguier_nature13685-s3.csv
+```
+
+* Below is the script for the R work done today
+
+```
+### Romiguier Data
+### 22 March 2017
+### ELK
+
+# Read in the Romiguier data:
+Rom <- read.csv("Romiguier_nature13685-s3.csv", header=T)
+
+# Check to see that the file was inported properly
+str(Rom)  # 76 observations are the species sampled in Romiguier
+head(Rom)
+
+# The data looks like it imported properly
+# Now let's look at how the strength of purifying selection (piN/piS) compares to the size of Ne (piS). We'll plot these on a log scale to linearize the relationship.
+plot(log(Rom$piS), log(Rom$piNpiS), pch=21, bg="blue", xlab="log Synonymous Nucleotide Diversity (piS)", ylab="log Ratio of Nonysn to Syn Diversity (piN/piS)", main="Purifying Selection vs. Effective Population Size") # low diversity species has a lot of deleterious (nonsynonymous mutations) whereas high diversity species have fewer nonsynonymous mutations
+
+# Now let's add our SSW points to the existing plot and give them a different symbol
+points(log(0.00585312), log(0.264041), pch=24, cex=1.5, bg="red") # points command adds data points onto an existing graph # the red triangle now represents where out species of seastar falls on this graph
+
+# seastars have a relatively high ratio of nonsyn to syn mutations indicating that our species has a lot of nonsynonymous mutations not cleared out by purifying selection
+
+# We can also add a regression line to the plot to see how far off the SSW estimates are from expectation
+reg <- lm(log(Rom$piNpiS) ~ log(Rom$piS)) # Fits a linear regression of ONLY ROMIGUIER data
+abline(reg) # adds the regression line to the plot
+
+# It would be useful to highlight the other echinoderms in the dataset...do our seastars behave similarly?
+echino <- Rom[which(Rom$Phylum=="Echinodermata"),] # subsets the data to select only species of the phylum Echinodermata
+points(log(echino$piS), log(echino$piNpiS), pch=21, bg="red") # adds the points
+# appears that our species does cluster with about 4 other species of echinoderms although 4 other species have high diversity and clear out the diversity more effectively
+
+
+# Lastly, let's add a legend:
+legend("bottomleft", cex=1, legend=c("Metazoans", "Echinoderms", "P. ochraceus"), pch=c(21,21,24), col=c("blue", "red", "red"))
+
+
+# Pisaster seems to be in a group with other echinoderms that have relaxed purifying selection (high piN/piS), given their Ne...Interesting! Can we hypothesize why this might be?
+
+# Now we can get at Ne
+Ne <- 0.00585/(4*4*10^-9)
+print(Ne)
+
+```
+
+PiS ~= theta = 4Neu
+
+We now know what PiS is and we can get u from the literature (~4x10^-9)
+
+Ne=piS/4u = 0.00585/4*4x10^-9 = **365,625** <- this is likely to be much less than the actual number in the oceans
+
+The major caveat is how good is our estimated mutation rate? Also assumes that the generation of our seastars is the same as the estimate we are using
+
+
 
 ------
 
 <div id='id-section17'/>
 
-### Entry 17:
+### Entry 17: 2017-03-27
+
+### Selective sweeps
+
+Rise in allele frequency, reduction in genetic diversity (through linkage/genetic hitchhiking - reduces genetic diversity of genes in association with the gene under selective sweep
+
+* hard sweeps - sharp decline in genetic diversity (**Hard can be hard on a local scale and soft on a global scale**)
+* soft sweeps - not as sharp decline in genetic diversity because multiple alleles are present after selection
+
+![SelectiveSweeps](C:\Users\Erin\OneDrive\Documents\UVM\UVM Spring 2017\Ecological Genomics\PBIO DATA\SelectiveSweeps.jpg)
+
+* Big picture - so what?
+  * Disease
+  * Conservation 
+  * Status of a population
+  * We care about how populations with respect to their genotype evolve
+* Examples
+  * HIV
+  * Resistance to pesticides (genes documented in Drosophila)
+  * Lactose intolerance (ancestral state - intolerance)
+    * Happened twice in both Eurasian and African population
+* Key parameters
+  * **Theta**- a rate at which a mutation enters a population
+    * Theta = 2 or 4 * Ne * u
+    * How fast an advantageous allele sweeps across a population depends on:
+      * population size (Ne)
+      * fitness effects
+* Alternative hypotheses (other than selection)
+  *  genetic drift
+  *  neutral processes
+  *  Cause and effect?
+
+### Literature discussion: The population genomics of rapid adaptation: Disentangling signatures of selection and demography in white sands lizards
+
+* Purpose:
+  * To study rapid selection during a colonization event
+  * Colonization - can cause bottlenecks, found effect, selective sweeps (locally on genome)
+  * Mc1r - affects melanin --> albinism, melanin stripes, etc. (mate attraction, camouflage, etc.)
+* White sand dune 
+  * Stark white sand; very different from rest of desert (darker). Arose ~ 7k years ago
+* 3 sites
+  * WS = white sands
+  * DS1 = no geographical barriers, ~85km away
+  * DS2 = no geographical barriers, ~50km away
+* Samples 2 focal species at all population sites
+  * *Sceloporus cowlesi*
+  * *Aspidoscelis inornata*
+* Goals of the study
+  * Infer, for each species, its **demographic history** of colonizing WS
+  * Mc1r as a candidate gene
+  * Estimate of time that mutation arose --> selective sweep (consistent with geologic knowledge of area?)
+* Molecular sampling
+  * **fosmid** - Useful when unsure about study genome, want area around candidate gene. Too long for PCR
+    * plasmid in *E. coli*, fertility plasmid that facilitates sharing of plasmids. Can introduce genes easily in fosmids
+    * Can generate a living library containing 40k bp chunks of lizard genome into fosmid
+    * Then insert fosmid into *E. coli* and let grow
+    * millions of times, plate it out on pitri dish, each *E. coli* contains different chunks of lizard genome
+    * Use complementary DNA probe for Mc1r to detect which colony contains Mc1r gene
+  * 96 random clones and sequenced them (= chunks of 40kb from randon parts of the genome)
+    * Use to estimate neutral demographic events
+    * Compare that to Mc1r
+    * More severe the sweep, more difficult to disentangle bottleneck from sweep
+    * Sequenced Mc1r --> generate de novo assembly of Mc1r region
+    * Design **capture probes** - primers based on reference sequence
+    * Illumina Hi seq
+    * 10individuals/pop/species
+    * Call SNps (GATK) (minimize false positive SNPs)
+    * Eliminate SNPs that had any missing data (so all individuals must have SNP call at that loci)
+      * 13k SNPs in whiptail
+      * 20k SNPs in Cowlesi
+  * Results
+    * demographic bottleneck, little to no migration
+    * 3 separated populations
+    * For both species, it differs in which DS population was the source population
+    * Tajima's D - 
+      * evolves neutrally - D = 0
+      * D <0, tree with shorter, more recent branches, i.e. selective sweep (many low frequency alleles)
+      * D > 0, rare mutations are missing, bottleneck, genetic drift
+    * CLR test - higher CLR values, more selective sweep. 
+    * s (selection coefficient) - log(s) = -1 indicates a 10% fitness benefit, or a .1 change in s
+      * typically, we see 0.01 for s
+
+### Computer Lab - Population genetic structure
+
+```
+# unzipped biallelic data file:
+gunzip SSW_all_biallelic.MAF0.02.Miss0.8.recode.vcf.gz # turns it into a simple vcf file
+#used WinSCP to get unzipped file onto PC
+
+# above in Putty/WinSCP------below in R-----------------
+
+# We'll need to install 2 packages to work with the SNP data:
+install.packages("vcfR") # reads in vcf files and proides tools for file conversion 
+install.packages("adegenet") # pop-genetics package with some handy routines, including PCA and other multivariate methods (DAPC) # in R, downloaded packages
+
+# ...and load the libraries in R
+library(vcfR)
+library(adegenet)
+
+# reading in vcf file
+vcf1 <- read.vcfR("SSW_all_biallelic.MAF0.02.Miss0.8.recode.vcf")
+# My results are a bit off from Dr. Keller's - he gets 5317 SNPs whereas I have a few more
+# Meta line 8 read in.
+# All meta lines processed.
+# Character matrix gt created.
+# Character matrix gt rows: 5565
+# Character matrix gt cols: 31
+# skip: 0
+# nrows: 5565
+# row_num: 0
+# Processed variant: 5565
+# All variants processed
+
+# The adegenet package uses a highly efficient way of storing large SNP datasets in R called a "genlight" object. The following function creates a genlight object from your vcf:
+gl1 <- vcfR2genlight(vcf1)
+print(gl1) # Looks good! Right # of SNPs and individuals!
+
+# For info, try:
+gl1$ind.names # individual ID's
+gl1$loc.names[1:10] # first 10 loci names 
+gl1$chromosome[1:3] # First three chromosome = JUST transcript ID
+
+# Notice there's nothing in the field that says "pop"? Let's fix that...
+ssw_meta <- read.table("ssw_healthloc.txt", header=T) # read in the metadata
+str(ssw_meta) # to get a structure on the file, includes indv, status, location, SNPs,etc.
+ssw_meta <- ssw_meta[order(ssw_meta$Individual),] # sort by Individual ID, just like the VCF file. Must be in the same order as the VCF file is.
+
+gl1$pop <- ssw_meta$Location # assign localtion info # in original script, said locality not location which is inconsistant and would give you an error message
+gl1$other <- as.list(ssw_meta$Trajectory) # assign disease status
+
+# WE can explore the structure of our SNP data using the glPlot function, which gives us a sample x SNP view of the VCF file
+glPlot(gl1, posi="bottomleft") # this generates a heat-map like plot that for every individyal and for every SNP, which loci have missing data (white). 0 counts = reference heterozygote (blue), pink (heterogyote), red indicates derived homozygote
+
+# Now, let's compute the PCA on the SNP genotypes and plot it:
+pca1 <- glPca(gl1, nf=4, parallel = FALSE) # nf = number of PC axes to retain (here, 4)# needed to add parallel = FALSE for Windows users
+pca1 # prints summary # includes the loading which allows you to look at how strongly the SNPs are driving the data (below)
+
+# Plot the individuals in SNP-PCA space, with locality labels:
+plot(pca1$scores[,1], pca1$scores[,2], 
+     cex=2, pch=20, col=gl1$pop, 
+     xlab="Principal Component 1", 
+     ylab="Principal Component 2", 
+     main="PCA on SSW data (Freq missing=20%; 5317 SNPs)")
+legend("topleft", 
+       legend=unique(gl1$pop), 
+       pch=20, 
+       col=c("black", "red"))
+       
+
+# Perhaps we want to show disease status instead of locality:
+plot(pca1$scores[,1], pca1$scores[,2], 
+     cex=2, pch=20, col=as.factor(unlist(gl1$other)), 
+     xlab="Principal Component 1", 
+     ylab="Principal Component 2", 
+     main="PCA on SSW data (Freq missing=20%; 5317 SNPs)")
+legend("topleft", 
+       legend=unique(as.factor(unlist(gl1$other))), 
+       pch=20, 
+       col=as.factor(unique(unlist(gl1$other))))
+
+# Which SNPs load most strongly on the 1st PC axis?
+loadingplot(abs(pca1$loadings[,1]),
+            threshold=quantile(abs(pca1$loadings), 0.999))
+
+# Get their locus names
+threshold=quantile(abs(pca1$loadings), 0.999)
+threshold
+gl1$loc.names[which(abs(pca1$loadings)>threshold)]
+
+# DAPC - discrimitive analysis PC (where we recognize disease groups a priori and then ask how well do the SNPs differentiate those groups, then we can ask, what SNPs are those?)
+
+##### Keller will fix tutortial to we can run the DAPC tutorial 
+
+      
+
+```
 
 ------
 
 <div id='id-section18'/>
 
-### Entry 18:
+### Entry 18: 2017-03-29
+
+### Info-update: detecting local adaptation from population genomic outlier analysis
+
+1) Local adaptation
+
+2) Different approaches
+
+* genetic - environment association analyses
+* Differentiation outlier method (Fst)
+
+3) Common obstacles
+
+* Confounding factors
+  * demographic history
+  * neutral population structure
+  * background selection
+* Missing genome
+  * reduced representation
+  * Missing structural variants in reference (i.e. inversions, if doesn't match to reference - thrown out)
+  * Loss of repetitive regions/paralogs
+* Missing landscape
+  * Low-resolution environmental data
+  * Scale of local adaptation 
+  * Multi co-linearity (multiple variables that are associated with each other; i.e. temperature and disease)
+
+4) Solutions
+
+* Confounding factors
+  * Null demographic models (if you have a good sense of what the demographic history of your population is)
+  * Relatedness among samples
+* Missing genome
+  * exome capture/RNA seq (capturing regions of the genome that are function, so higher likelihood that you will find areas under selection)
+  * WGS
+  * reference genome
+  * sufficient depth of coverage
+* Missing landscape
+  * know your system
+
+5) Other considerations
+
+* sampling strategy
+  * number of individuals
+  * paired sample
+* Multiple comparisons
+  * FDR
+  * Sliding window
+* genomic architecture
+
+6) Final notes
+
+* Have proper sample size
+* Establishing FDR
+* Sliding window (i.e. genomic scan)
+* Genomic architecture in your local system
+
+### Paper discussion
+
+#### Kubota, S., Iwasaki, T., Hanada, K., Nagano, A. J., Fujiyama, A., Toyoda, A., … Morinaga, S. I. (2015). A Genome Scan for Genes Underlying Microgeographic-Scale Local Adaptation in a Wild Arabidopsis Species. PLoS Genetics, 11(7), 1–26. http://doi.org/10.1371/journal.pgen.1005361
+
+* Arabidopsis 
+  * self-incompatible 
+* Goals:
+  * Micro-geographic scale in Japan
+    * 2 mountains with similar environment 
+  * both mountains each had 4 populations that differed in elevation
+  * 4 reference populations in low-lands
+    * this is because it is thought that the ancestral population started in these valley regions and then spread up towards the mountains
+* Experimental design
+  * 5 individuals per mountain
+  * 4 reference individuals for each location 
+  * Took leaf samples --> DNA libraries via Illumina
+  * de novo assembly
+  * determined candidate genes (phenotypic trait of interest - tricomb density)
+  * looking for convergent evolution
+* Results
+  * delta K (Evanno's) is somewhat biased because you cannot test for K=1
+  * Q plot indicates 6 different populations
+  * G'st = standardized Gst (type of Fst analysis, developed by Nei to accommodate more loci, can't reach 1 so this is standardized
+  * U - measure of unidirection change in allele freq
+  * Gst - divergence
+  * delta D - frequency of derived allele 
+  * SNP enrichment analysis tends to overestimate gene fold differences because they are assumed to be independent observations
+  * Found evidence of local adaptation at microgeographic scale - identified candidate genes
+
+### Homework 03
+
+* Due next Wednesday (April 5)
+* ​
+
+### Computer lab
+
+* ADMIXTURE analysis
+
+  * data set of i individuals @ j SNPs --> Pr(genotypes|K (specified one at time), Q (ancestry[proportion of genome that comes from each of the K populations]),P (allele frequency at each SNP in each of the K populations))
+
+  * So for a given K, try and find a combination of P and Q that best describes matrix of SNP genotypes (so maximized Q and P using Maximum Likelihood) [STRUCTURE uses same method; however, ADMIXTURE does this entirely in a ML, rather than Bayesian]
+
+  * G matrix: Divides into 5 chunks and masks one random chunk, estimates Q and P using remaining chunks and tries to predict genotypes in the masked chunk = **cross validation**. Want the **lowest** cross validation score (means less error)
+
+    ​			24
+
+    ​	5317 SNPS[ ] 
+
+    AA - 0
+
+    AT - 1
+
+    TT - 2
+
+    ? - 9
+
+    Where A is the ancestral allele and T is the derived allele
+
+    ```
+    cd to read to SNPS directory on server
+    $ cat SSW_tidal.pops # this allows us to take a look into the file. This file was generated by Drs. Keller & Pespeni
+    $ vim vcf2admixture_SSW.spid # look into the spid file
+    # copy to home directory SPID file, SSW_tidal.pops, and vcf2geno.sh file
+    $cp SSW_tidal.pops ~/
+    $cp vcf2admixture_SSW.spid ~/
+    $cp vcf2geno.sh ~/
+    $ vim vcf2geno.sh # to look into and edit the geno file
+    # bash scripts lets you write commands and store them in a file all at once and execute the file which will execute every command in the file. This is reproducable and it is faster and less tedious
+    # Base script: #!/bin/bash
+
+     # had to go back to March 20th lab to get updates script (below)
+    $ cd /data/project_data/snps/reads2snps
+    $ vcftools --gzvcf SSW_by24inds.txt.vcf.gz --min-alleles 2 --max-alleles 2 --maf 0.02 --max-missing 0.8 --recode --out ~/SSW_all_biallelic.MAF0.02.Miss0.8  
+    $ cd ~/
+    # vim vcf2geno.sh changed input file to SSW_all_biallelic.MAF0.02.Miss0.8.recode.vcf.gz and SSW_all_biallelic.MAF0.02.Miss0.8.recode.vcf.geno
+    # run bash file
+    $ ./vcf2geno.sh
+
+    # copy file into home directory
+    $ cp /data/project_data/snps/reads2snps/ADMIX.sh . # space . copies to the directory you are working in
+    $ vim ADMIX.sh
+    # K = 1 is the most likely because it has the lowest cross validation score (which means the least amount of error)
+    $ vim ADMIX.sh 
+    # changed K 1...10 to K 1...20 (to evaluate up to 20 populations)
+
+    ```
 
 ------
 
 <div id='id-section19'/>
 
-### Entry 19:
+### Entry 19: 2017-04-03
+
+Carl Fetter, 3rd year PhD student Steve Keller Lab
+
+# Fst
+
+### Concepts
+
+1) Inbreeding produces structured populations 
+
+- Founding population has some founding frequencies
+- As isolated individuals inbreed, shared polymorphisms will be shared by more individuals, increases genetic diversity briefly
+- Increase genetic diversity - have several isolated populations that inbreed (Fis = 1) but between populations (Fst = higher when looking across all populations)
+
+![Fstatistics](C:\Users\Erin\Desktop\Fstatistics.jpg)
+
+2) selective sweeps change allele frequencies in populations
+
+![SelectiveSweep](C:\Users\Erin\Desktop\SelectiveSweep.jpg)
+
+### Methods OutFlank (Fst)
+
+- Fst outlier approach for identifying natural selection
+
+3) Empirical p-values created from distributions of putatively neutral loci are super useful for finding natural selection
+
+* Separate allele frequency by demes
+* Diversifying selection --> local adaptation extremes of distribution
+* Stabilizing selection --> middle of distribution
+* Trim tails of distribution and make new distribution excluding trimmed tails
+  * This will make it so only the putatively neutral alleles remain
+* Then you go back with your emperical p-values and test for diversifying selection
+
+
+
+![EmpericalPValues](C:\Users\Erin\Desktop\EmpericalPValues.jpg)
+
+### F Statistics
+
+* Sewell Wright
+* All look at heterozygosity in:
+  * Individual (I)
+  * Subpopulation (S)
+  * Total populations (T)
+* Fst  - probability that any two individuals are identical by descent
+* Fst (subpopulation heterozygosity relative to total heterozygosity) = (Ht - Hs) / Ht
+* Fis (individual relative to total)= inbreeding coefficient = [Exp(Hs)-Obs(Hs)]/Exp(Hs)
+* Fit (individual relative to total)= [Ht - Hi]/[Ht]
+
+
+
+### Questions
+
+1) What challenges do outlier detection methods face?
+
+2) How is LD our friend and foe?
 
 ------
 
@@ -2073,5 +2551,9 @@ DESeq2:::plotPCA.DESeqTransform
 - **DEF** - Distribution of fitness effects; continuum selective effect on fitness
 - **genetic hitchiking** - Selective sweeps; strong and selective act on an amino acid change carrying out neutral or deleterious mutations
 - **Background selection ** - selection; strong selection removes positive or neutral mutations
+- **"Sweep"** -  pattern whereby a single adaptive allele "sweeps" through population *goes to fixation or nearly so)
+- **Hard sweeps** - Single adaptive allele in a common genetic background
+- **Soft sweep** - More than one adaptive alleles in different genetic background
+- ​
 
 ------
