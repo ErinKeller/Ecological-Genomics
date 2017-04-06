@@ -33,7 +33,7 @@ Lecture notes, paper discussions, and coding done in and out of class.
 - [Entry 17:](#id-section17).
 - [Entry 18:](#id-section18).
 - [Entry 19:](#id-section19).
-- [Entry 20:](#id-section20).
+- [Entry 20: Assignment #3 Script](#id-section20).
 - [Entry 21:](#id-section21).
 - [Entry 22:](#id-section22).
 - [Entry 23:](#id-section23).
@@ -2235,19 +2235,161 @@ Carl Fetter, 3rd year PhD student Steve Keller Lab
 * Fis (individual relative to total)= inbreeding coefficient = [Exp(Hs)-Obs(Hs)]/Exp(Hs)
 * Fit (individual relative to total)= [Ht - Hi]/[Ht]
 
-
-
 ### Questions
 
 1) What challenges do outlier detection methods face?
 
 2) How is LD our friend and foe?
 
+# Computer Lab - OutFast
+
+```
+# Script for OutFLANK 
+# 3 Aril 2017
+# Erin L. Keller
+
+# Install the OutFLANK software
+install.packages("devtools")
+library(devtools)
+library(tcltk)
+install.packages("stringi")
+library(stringi)
+source("http://bioconductor.org/biocLite.R")
+library(ade4)
+library(tibble)
+biocLite("qvalue")
+install_github("whitlock/OutFLANK")
+               
+# Load these packages
+library(OutFLANK)
+library(vcfR)
+library(adegenet)
+
+# read in your .geno file. OutFlANK requires it to be transposed, so we'll do that next.
+ssw.geno_in <- read.fwf("SSW_all_biallelic.MAF0.02.Miss0.8.recode.vcf.geno",width=rep(1,24))
+ssw.geno <- t(ssw.geno_in) # t = transpose
+dim(ssw.geno)
+
+# Read in the meta data
+ssw_meta <- read.table("ssw_healthloc.txt",header=T) # read in the data
+ssw_meta <- ssw_meta[order(ssw_meta$Individual),] # reorder the meta_data by Ind number
+ssw_meta$Trajectory[which(ssw_meta$Trajectory =='MM')] = NA # remove the MM's from the analysis; by setting MM to NA they will be excluded in the analysis
+
+# Now we can use OutFLANK
+iOF_SNPs <- MakeDiploidFSTMat(ssw.geno, locusNames = seq(1,5317,1),popNames = ssw_meta$Trajectory)
+dim(iOF_SNPs)
+head(iOF_SNPs)
+OF_Out <- OutFLANK(FstDataFrame = iOF_SNPs,LeftTrimFraction = 0.05,RightTrimFraction = 0.05,Hmin = 0.1,NumberOfSamples = 3,qthreshold = 0.1)
+OutFLANKResultsPlotter(OF_Out,withOutliers = T,NoCorr = T,Hmin = 0.1,binwidth = 0.005,titletext = "Scan for local selection")
+outliers <- which(OF_Out$results$OutlierFlag=="TRUE")
+
+# We can extract information about the outliers by reading in the vcf file and looking at the annotations
+vcf1 <- read.vcfR("SSW_all_biallelic.MAF0.02.Miss0.8.recode.vcf")
+vcfann <- as.data.frame(getFIX(vcf1)) # grabs annotation
+vcfann[outliers,] # 
+
+
+###############################
+Back in Putty
+##########################################
+vim /data/project_data/assembly/08-11-35-36_cl20_longest_orfs_gene.cds
+/DN46509
+# copy sequence
+# BAST sequence
+# My sequence (DN46509) came back as an uncharacterized protein from the purple urchin S. purpuratus
+# My sequence (46269) comes back as 
+
+
+
+```
+
 ------
 
 <div id='id-section20'/>
 
-### Entry 20:
+### Entry 20: 2017-04-05 Assignment 3
+
+The following code was used to generate Q plots from the analysis in ADMMIXTURE for two filtering strategies.
+
+```
+### Ecological Genomics
+### Assignment 3 - Q Plots from ADMIXTURE
+### Erin L. Keller
+### 2017 April 3 
+
+# Script for making Q plot using HWE filter
+# Import the ADMIXTURE Q matrices
+K1Q <- read.table("biallelic_hwe0.01.recode.vcf.1.Q")
+K2Q <- read.table("biallelic_hwe0.01.recode.vcf.2.Q")
+K3Q <- read.table("biallelic_hwe0.01.recode.vcf.3.Q")
+
+
+# Get the SSW meta-data
+ssw_meta <- read.table("ssw_healthloc.txt", header=T)
+
+# Set up the plotting conditions for a multi-panel plot (3 rows, 1 column)
+par(mfrow=c(3,1))
+
+# Make the barplots for K=1-3
+barplot(t(as.matrix(K1Q)), 
+        col=rainbow(2),
+        names.arg=ssw_meta$Location, 
+        cex.names=0.75, 
+        xlab="Individual", ylab="Ancestry",
+        main="K=1",
+        border=NA)
+barplot(t(as.matrix(K2Q)), 
+        col=rainbow(2),
+        names.arg=ssw_meta$Location, 
+        cex.names=0.75, 
+        xlab="Individual", ylab="Ancestry", 
+        main="K=2",
+        border=NA)
+barplot(t(as.matrix(K3Q)), 
+        col=rainbow(3),
+        names.arg=ssw_meta$Location, 
+        cex.names=0.75, 
+        xlab="Individual", ylab="Ancestry",
+        main="K=2",
+        border=NA)
+# Script for creating a Q plot using the MAF filtering
+
+# Import the ADMIXTURE Q matrices
+K1Q <- read.table("biallelic_maf0.03..recode.vcf.1.Q")
+K2Q <- read.table("biallelic_maf0.03..recode.vcf.2.Q")
+K3Q <- read.table("biallelic_maf0.03..recode.vcf.3.Q")
+
+
+# Get the SSW meta-data
+ssw_meta <- read.table("ssw_healthloc.txt", header=T)
+
+# Set up the plotting conditions for a multi-panel plot (3 rows, 1 column)
+par(mfrow=c(3,1))
+
+# Make the barplots for K=1-3
+barplot(t(as.matrix(K1Q)), 
+        col=rainbow(2),
+        names.arg=ssw_meta$Location, 
+        cex.names=0.75, 
+        xlab="Individual", ylab="Ancestry", 
+        main= "K=1",
+        border=NA)
+barplot(t(as.matrix(K2Q)), 
+        col=rainbow(2),
+        names.arg=ssw_meta$Location, 
+        cex.names=0.75, 
+        xlab="Individual", ylab="Ancestry", 
+        main="K=2",
+        border=NA)
+barplot(t(as.matrix(K3Q)), 
+        col=rainbow(3),
+        names.arg=ssw_meta$Location, 
+        cex.names=0.75, 
+        xlab="Individual", ylab="Ancestry",
+        main="K=3",
+        border=NA)
+
+```
 
 ------
 
